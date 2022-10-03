@@ -73,7 +73,7 @@
 //     console.log(numbs[i]);
 // }
 
-const numbs = [[34, 45, 25, 11], [88, 69, 48, 22], [74, 56, 92, 31], [24, 36, 72, 16]]
+// const numbs = [[34, 45, 25, 11], [88, 69, 48, 22], [74, 56, 92, 31], [24, 36, 72, 16]]
 
 // for (let i = 0; i < numbs.length; i++) {
 //     for (let j = 0; j < numbs[i].length; j++) {
@@ -82,17 +82,17 @@ const numbs = [[34, 45, 25, 11], [88, 69, 48, 22], [74, 56, 92, 31], [24, 36, 72
     
 // }
 
-for (let value of numbs) {
-    console.log(value);
-}
+// for (let value of numbs) {
+//     console.log(value);
+// }
 
 
-const an_obj = {
-    '3': 123,
-    '1': 456,
-    '5': 789,
-    '9': 444,
-}
+// const an_obj = {
+//     '3': 123,
+//     '1': 456,
+//     '5': 789,
+//     '9': 444,
+// }
 
 // console.log(an_obj[3])
 
@@ -100,6 +100,77 @@ const an_obj = {
 //     console.log(i, Object.keys(an_obj)[i], Object.keys(an_obj), an_obj[Object.keys(an_obj)[i]])
 // }
 
-for (let key in an_obj) {
-    console.log(key, an_obj[key]);
+// for (let key in an_obj) {
+//     console.log(key, an_obj[key]);
+// }
+
+
+// const n = [2, 3, 6, 8, 4, 1,];
+
+// function min(arr) {
+//     let result = arr[0];
+
+//     for (let value of arr) {
+//         if (value < result) {
+//         result = value;
+//       }
+
+//     }
+
+    // for (let i = 1; i < arr.length; i++) {
+    //     if (arr[i] < result) {
+    //     result = arr[i];
+    //   }
+    // }
+
+//     return result;
+// }
+
+// function max(arr) {
+//     let result = 0;
+
+//     for (let value of arr) {
+//        if (value > result) {
+//         result = value;
+//        } 
+//     }
+
+//     return result;
+// }
+
+// function averenge(arr) {
+//     let result = 0;
+
+//     for (let value of arr) {
+//         result = result + value;
+//     }
+
+//     return result/arr.length;
+// }
+
+// console.log(min(n));
+// console.log(max(n));
+// console.log(averenge(n));
+
+
+
+const n = [2, 3, 6, 8, 4, 1,];
+
+function maxmin(arr) {
+    let min = arr[0];
+    let max = arr[0];
+
+    for (let val of arr) {
+        if (val < min) {
+            min = val;
+        }
+        if (val > max) {
+            max = val;
+        }
+    }
+
+    console.log(`min:${min}, max:${max}`);
 }
+
+maxmin(n)
+
