@@ -154,23 +154,23 @@
 
 
 
-const n = [2, 3, 6, 8, 4, 1,];
+// const n = [2, 3, 6, 8, 4, 1,];
 
-function maxmin(arr) {
-    let min = arr[0];
-    let max = arr[0];
+// function maxmin(arr) {
+//     let min = arr[0];
+//     let max = arr[0];
 
-    for (let val of arr) {
-        if (val < min) {
-            min = val;
-        }
-        if (val > max) {
-            max = val;
-        }
-    }
+//     for (let val of arr) {
+//         if (val < min) {
+//             min = val;
+//         }
+//         if (val > max) {
+//             max = val;
+//         }
+//     }
 
-    console.log(`min:${min}, max:${max}`);
-}
+//     console.log(`min:${min}, max:${max}`);
+// }
 
-maxmin(n)
+// maxmin(n)
 
