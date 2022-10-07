@@ -160,8 +160,11 @@ let users = [
 
 
 function findUserBalance (userData) {
+    let extractSymbols = ['$',','];
     let userBalance = userData.balance.split('').filter(function (item, i, arr) {
-        return (item !== '$' && item !== ',')
+        // return (item !== '$' && item !== ',')
+       return !extractSymbols.includes(item)
+        
     }).join('');
 
     return Number(userBalance);
@@ -182,12 +185,22 @@ let usersTel = users.map(function (userData, i , arr) {
 }).filter(item => item !== undefined);
 
 
-console.log(usersTel);
-console.log(totalUsersBalance); 
+// console.log(usersTel);
+// console.log(totalUsersBalance); 
 
-// let newStr = "$1,790.56".split('').filter(function (item, i, arr) {
-//     return (item !== '$' && item !== ',')
-        
-    
-// }).join('')
-// console.log(newStr)
+
+// ДЗ 12. Реализуйте функцию removeElement
+
+// Реализуйте функцию removeElement(array, item), чтобы удалить элемент item из массива array.
+
+const array = [1, 2, 3, 4, 5, 6, 7];
+
+function removeElement(arr, element) {
+    let newArr = arr.filter(function(item){
+        return item !== element
+    })
+    return newArr
+}
+
+console.log(removeElement(array, 5));
+// Результат: [1, 2, 3, 4, 6, 7]
