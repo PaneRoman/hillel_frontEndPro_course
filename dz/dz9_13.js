@@ -162,8 +162,7 @@ let users = [
 function findUserBalance (userData) {
     let extractSymbols = ['$',','];
     let userBalance = userData.balance.split('').filter(function (item, i, arr) {
-        // return (item !== '$' && item !== ',')
-       return !extractSymbols.includes(item)
+        return !extractSymbols.includes(item)
         
     }).join('');
 
@@ -173,20 +172,15 @@ function findUserBalance (userData) {
 let totalUsersBalance = users.map(findUserBalance).reduce((acc, item) => acc + item, 0);
 
 let usersTel = users.map(function (userData, i , arr) {
-
-    // let userBalance = userData.balance.split('').filter(function (item, i, arr) {
-    //     return (item !== '$' && item !== ',')
-    // }).join('');
-
     if (findUserBalance(userData) > 2000) {
         return userData.phone
     }
-        
+   
 }).filter(item => item !== undefined);
 
 
-// console.log(usersTel);
-// console.log(totalUsersBalance); 
+console.log(usersTel);
+console.log(totalUsersBalance); 
 
 
 // ДЗ 12. Реализуйте функцию removeElement
@@ -197,10 +191,94 @@ const array = [1, 2, 3, 4, 5, 6, 7];
 
 function removeElement(arr, element) {
     let newArr = arr.filter(function(item){
-        return item !== element
+        return item !== element;
     })
-    return newArr
+    return newArr;
 }
 
 console.log(removeElement(array, 5));
-// Результат: [1, 2, 3, 4, 6, 7]
+
+
+
+// ДЗ 13. Написать несколько функций
+// Эта дз состоит из четырех небольших задач, за реализацию каждой из них можно получить 25 баллов:
+
+// - Дан массив с элементами разных типов.
+// Создать функцию которая высчитывает среднее арифметическое только числовых элементов данного массива.
+
+let someArr = [2, 3, 9, 8, 20, 1, NaN, 'jjjk', false, true, '', [], {}];
+
+function averageCalc(arr) {
+    console.log(arr)
+    let newArr = arr.filter(function (item) {
+        if (typeof item == 'number') {
+            if (!item) {
+                return false
+            }
+            return true
+        }
+    })
+    console.log(newArr)
+    return (newArr.reduce((acc, item) => acc + item, 0)) / newArr.length;
+    
+}
+
+console.log(averageCalc(someArr));
+
+
+// - Написать функцию doMath(x, znak, y), которая получает 3 аргумента: числа x и y, строку znak.
+// В переменной znak может быть: +, -, *, /, %, ^ (степень). Вывести результат математического действия, указанного в переменной znak.
+// Оба числа и знак получаются от пользователя.
+
+let x = Number(prompt('Введите 1-ое число', 5))
+let y = Number(prompt('Введите 1-ое число', 10))
+let znak = prompt('Введите любой из знаков (+, -, *, /, %, ^)')
+
+function doMath(x, znak, y) {
+   if (znak == '+') return alert(`${x}+${y}=${x + y}`);
+   if (znak == '-') return alert(`${x}-${y}=${x - y}`);
+   if (znak == '*') return alert(`${x}*${y}=${x * y}`);
+   if (znak == '/') return alert(`${x}/${y}=${x / y}`);
+   if (znak == '%') return alert(`${x}%${y}=${x % y}`);
+   if (znak == '^') return alert(`${x}^${y}=${x ** y}`);
+}
+
+console.log(doMath(x, znak, y))
+
+
+// - Написать функцию заполнения пользовательскими данными двумерного массива.
+// Длину основного массива и внутренних массивов задаёт пользователь.
+// Значения всех элементов всех массивов задаёт пользователь.
+
+function createUserArr() {
+    let userArr = new Array(+prompt('Введитете длинну основного массива:', 4)).fill(0)
+    .map(function (item, i) {
+        return item = new Array(+prompt(`Введитете длинну ${i} внутреннего массива:`, 4)).fill(0)
+            .map(function (element, index) {
+                return element = +prompt(`Введите ${index} значение массива ${i}`)
+            })
+    } )
+    return userArr;
+}
+
+console.log(createUserArr());
+
+
+
+// - Создать функцию, которая убирает из строки все символы, которые мы передали вторым аргументом. 
+// 'func("hello world", ['l', 'd'])' вернет нам "heo wor". 
+// Исходную строку и символы для удаления задаёт пользователь
+
+function delSymbol(str, arr) {
+    let strArr = str.split('').filter(function (item) {
+        if (arr.includes(item)) {
+            return false;
+        }
+        return true;
+    })
+    return strArr.join('');
+}
+
+console.log(delSymbol('hello world', ['l', 'd']))
+
+
