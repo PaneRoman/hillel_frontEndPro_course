@@ -40,9 +40,9 @@ class Flat {
         this.tenants = 0;
     }
 
-    createTenant(fullName, howOld, flatNumber) {
+    createTenant(fullName, howOld, sex) {
         this.tenants++;
-        this[`tenant ${fullName.split(' ')[0]}`] = new Tenant(fullName, howOld, flatNumber)
+        this[`tenant ${fullName.split(' ')[0]}`] = new Tenant(fullName, howOld, sex)
         return this
     }
 }
