@@ -65,8 +65,7 @@ function createHuman() {
 
     let howOld = prompt('Input Your Age', 41);
     if(howOld < 18) {
-        alert('You so young! Go to mama, and ask her permission ;)');
-        return;
+        alert('Do you have passport? ;)');
     }
 
     return new Human(firstName, secondName, howOld);
@@ -74,16 +73,16 @@ function createHuman() {
 
 function createCar() {
     let model = prompt(`Input Car Model`, `Nissan`);
-    checkInput(model, 'Car Model', `Nissan`);
+    model = checkInput(model, 'Car Model', `Nissan`);
 
     let age = +prompt('Input Car Age', 12);
-    checkAge(age, 50);
+    age = checkAge(age, 50);
 
     let distance = +prompt('Input Car Distance', 25000);
-    checkAge(distance, 100000);
+    distance = checkAge(distance, 100000);
 
     let color = prompt(`Input Car Color`, `Red`);
-    checkInput(model, 'Car Color', `Red`);
+    color = checkInput(color, 'Car Color', `Red`);
 
     return new Car(model, age, distance, color);
 }
@@ -98,13 +97,10 @@ function checkInput(name, nth, input) {
 function checkAge(num1, num2) {
     if(num1 > num2) {
         alert('OMG! Your car is TRAAAAASH :(');
-        return;
+        return `${num2}+`;
     }
+    return num1;
 }
-
-// let firstName = prompt('Input First Name', 'Roman');
-// let secondName = prompt('Input Second Name', 'Petrov');
-// let howOld = prompt('Input Your Age', 41);
 
 class Human {
     constructor(firstName, secondName, howOld) {
