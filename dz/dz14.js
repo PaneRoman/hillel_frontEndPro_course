@@ -15,7 +15,18 @@ class House {
 }
 
 let house = new House(9, 'brick', 10, 'middletown').createFlats(36);
-// console.log(house);
+console.log(house);
+
+
+class Tenant {
+    constructor(fullName, howOld, sex) {
+        this.fullName = fullName;
+        this.howOld = howOld;
+        this.sex = sex;
+        // this.flatNumber = '#' + flatNumber;
+    }
+}
+
 
 class Flat {
     constructor(rooms, flatType, square, repair, bathrooms, balcony, stat) {
@@ -26,117 +37,30 @@ class Flat {
         this.bathrooms = bathrooms;
         this.balcony = balcony;
         this.stat = stat;
-        this.tenant = 0;
+        this.tenants = 0;
     }
 
-    createTenant() {
-        this.tenant++;
+    createTenant(fullName, howOld, flatNumber) {
+        this.tenants++;
+        this[`tenant ${fullName.split(' ')[0]}`] = new Tenant(fullName, howOld, flatNumber)
         return this
     }
 }
 
-let flat = new Flat(45, 'studio', 50, 'yes', 1, 'none', 'free').createTenant().createTenant().createTenant();
-// console.log(flat);
+let flat = new Flat(45, 'studio', 50, 'yes', 1, 'none', 'free')
+    .createTenant('Roman Petrov', 41, 'male')
+    .createTenant('Evgeniya Petrova', 25, 'female')
+    .createTenant('EvgeniyaJR Petrova', 12, 'femael');
 
-class Tenant {
-    constructor(fullName, howOld, flatNumber) {
-        this.fullName = fullName;
-        this.howOld = howOld;
-        this.flatNumber = '#' + flatNumber;
-    }
-}
+console.log(flat);
 
-let tenant = new Tenant('Roman Petrov', 41, 191);
+// class Tenant {
+//     constructor(fullName, howOld, flatNumber) {
+//         this.fullName = fullName;
+//         this.howOld = howOld;
+//         this.flatNumber = '#' + flatNumber;
+//     }
+// }
+
+// let tenant = new Tenant('Roman Petrov', 41, 191);
 // console.log(tenant);
-
-
-// ДЗ 15. Создаем сущности
-
-// let firstName = prompt('Input First Name', 'Roman');
-// let secondName = prompt('Input Second Name', 'Petrov');
-// let howOld = prompt('Input Your Age', 41);
-
-function createHuman() {
-    let firstName = prompt(`Input First Name`, `Roman`);
-    firstName = checkInput(firstName, 'First Name', `Roman`);
-
-    let secondName = prompt(`Input Second Name`, `Petrov`);
-    secondName = checkInput(secondName, 'Second Name', `Petrov`);
-
-    let howOld = prompt('Input Your Age', 41);
-    if(howOld < 18) {
-        alert('Do you have passport? ;)');
-    }
-
-    return new Human(firstName, secondName, howOld);
-}
-
-function createCar() {
-    let model = prompt(`Input Car Model`, `Nissan`);
-    model = checkInput(model, 'Car Model', `Nissan`);
-
-    let age = +prompt('Input Car Age', 12);
-    age = checkAge(age, 50);
-
-    let distance = +prompt('Input Car Distance', 25000);
-    distance = checkAge(distance, 100000);
-
-    let color = prompt(`Input Car Color`, `Red`);
-    color = checkInput(color, 'Car Color', `Red`);
-
-    return new Car(model, age, distance, color);
-}
-
-function checkInput(name, nth, input) {
-    while (Number(name) || name.trim() === '' || Number(name) === 0) {
-        name = prompt(`Can't be empty or a number! Input ${nth}`, `${input}`);
-    }
-    return name.trim();    
-}
-
-function checkAge(num1, num2) {
-    if(num1 > num2) {
-        alert('OMG! Your car is TRAAAAASH :(');
-        return `${num2}+`;
-    }
-    return num1;
-}
-
-class Human {
-    constructor(firstName, secondName, howOld) {
-        this.firstName = firstName;
-        this.secondName = secondName;
-        this.howOld = howOld;
-    }
-
-    getData() {
-        console.log(`fullName:${this.firstName} ${this.secondName}, age: ${this.howOld}year`)
-    }
-}
-
-let human1 = createHuman();
-// let human2 = new Human('Evgeniu', 'Vadimeev', 42);
-console.log(human1);
-human1.getData();
-
-class Car {
-    constructor(model, age, distance, color) {
-        this.model = model;
-        this.age = age;
-        this.distance = distance;
-        this.color = color;
-    }
-
-    getData() {
-        console.log(`model: ${this.model}, age: ${this.age}year, distance: ${this.distance}km, color: ${this.color}`);
-    }
-
-    addOwner(human) {
-        this.owner = human;
-    }
-}
-
-let car = createCar();
-console.log(car);
-car.getData();
-car.addOwner(human1);
