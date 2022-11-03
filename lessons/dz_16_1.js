@@ -15,6 +15,15 @@ class Hamburger {
         this.cal = stuffing.cal;
     }
 
+    static SIZE_SMALL = {title: 'SIZE_SMALL', coast: 50, cal: 20};
+    static SIZE_LARGE = {title: 'SIZE_LARGE', coast: 100, cal: 40};
+    static STUFFING_CHEESE = {title: 'STUFFING_CHEESE', coast: 10, cal: 20};
+    static STUFFING_SALAD = {title: 'STUFFING_SALAD', coast: 20, cal: 5};
+    static STUFFING_POTATO = {title: 'STUFFING_POTATO', coast: 15, cal: 10};
+    static TOPPING_SPICE = {title: 'TOPPING_SPICE', coast: 15, cal: 0};
+    static TOPPING_MAYO = {title: 'TOPPING_MAYO', coast: 20, cal: 5};
+
+
     addTopping(topping) {
         if (!this.topping) {
             this.topping = [];
