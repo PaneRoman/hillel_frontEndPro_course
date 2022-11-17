@@ -84,3 +84,27 @@ function reverseSecondWord(string) {
 }
 
 console.log(reverseSecondWord(' Я     люблю   учить            JavaScript. Он такой  же как  и EcmaScript '));
+
+
+//==================================================
+function replace(str, inc, exc) {
+    let newStr = ''
+    let arr = str.split('');
+    console.log(arr);
+    for (let i = 0; i < inc.length; i++) {
+        for (let j = 0; j < arr.length; j++) {
+            if (inc[i] === arr[j]) {
+                newStr += exc[i]
+            } 
+            
+        }
+
+        
+    }
+    
+    
+
+    return newStr
+}
+
+console.log(replace('aaaaaabbbb', ['a','b'], ['b', 'a']));
