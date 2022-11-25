@@ -3,13 +3,16 @@ const app = document.querySelector('#app');
 const inputRef = document.createElement('input');
 const addRef = document.createElement('button');
 addRef.innerText = 'Add';
-
+const clearRef = document.createElement('button');
+clearRef.innerText = 'Clear all';
 const listRef = document.createElement('ul');
 
+// app.appendChild(inputRef);
+// app.appendChild(addRef);
+// app.appendChild(clearRef);
+// app.appendChild(listRef);
 
-app.appendChild(inputRef);
-app.appendChild(addRef);
-app.appendChild(listRef);
+app.append(inputRef, addRef, clearRef, listRef);
 
 let dataNumb = 0;
 let valueMemory = '';
@@ -23,6 +26,16 @@ addRef.addEventListener('click', () => {
     addTodoHandler(inputRef.value)
 });
 
+clearRef.addEventListener('click', clearAll);
+
+
+function clearAll() {
+    state = [];
+    // console.log(state);
+    localStorage.clear();
+    inputRef.value = '';
+    renderLi();
+}
 
 function addTodoHandler(value, numb) {
     state.push({
@@ -129,18 +142,18 @@ function editHandler(event) {
     
 }
 
-function changeHandler(event) {
-    console.log(event.target.value);
+// function changeHandler(event) {
+//     console.log(event.target.value);
     
-    let liObj = state.find((item) => {
-        return item.id == event.target.parentElement.dataset.id
-    })
+//     let liObj = state.find((item) => {
+//         return item.id == event.target.parentElement.dataset.id
+//     })
 
-    liObj.text = event.target.value;
+//     liObj.text = event.target.value;
 
-    console.log(state);
+//     console.log(state);
 
-}
+// }
 
 function saveHandler(event) {
     console.log(this.parentElement.children[0].value);
@@ -202,7 +215,7 @@ function createEditableLi(text, id) {
 
     const editInputRef = document.createElement('input');
     editInputRef.value = text;
-    editInputRef.addEventListener('change', changeHandler)
+    // editInputRef.addEventListener('change', changeHandler)
     
     const saveRef = document.createElement('button');
     saveRef.innerText = 'Save';
