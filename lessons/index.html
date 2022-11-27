@@ -65,9 +65,11 @@ hi hillel !
 <button onclick="clickHandler(event)" type="checkbox">Click</button>
 <hr>
 
-<h1>To Do List</h1>
 
-<div id="app"></div>
+
+<div id="app">
+    <h1>To Do List</h1>
+</div>
 
 <div id="whether-app">
     <h1>Weather Wizzard</h1>
@@ -76,9 +78,11 @@ hi hillel !
             <img class="weather-icon" src="img/1.jpg" alt="wICON">
         </div>
         <select name="cities" id="cities">
-            <option value="DNIPRO">Dnipro</option>
             <option value="LVIV">Lviv</option>
+            <option value="DNIPRO" selected>Dnipro</option>
             <option value="KHARKIV">Krarkiv</option>
+            <option value="KHERSON">Kherson</option>
+            <option value="KYIV">Kyiv</option>
         </select>
         <button class="refresh-btn">Refresh</button>
     </div>

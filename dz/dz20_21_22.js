@@ -28,6 +28,7 @@ function delFocusHandler() {
 
 // ДЗ 21. Таблица
 
+const tableDiv = document.querySelector('div.table');
 const table = document.createElement('table');
 let num = 1;
 
@@ -45,7 +46,7 @@ for (let i = 0; i < 10; i++) {
     }
 }
 
-document.body.appendChild(table);
+tableDiv.appendChild(table);
 
 
 

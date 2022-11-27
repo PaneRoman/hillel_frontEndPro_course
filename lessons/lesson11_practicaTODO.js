@@ -1,52 +1,115 @@
 const app = document.querySelector('#app');
 
 const inputRef = document.createElement('input');
+inputRef.setAttribute('name', 'add');
+
 const addRef = document.createElement('button');
 addRef.innerText = 'Add';
+
 const clearRef = document.createElement('button');
 clearRef.innerText = 'Clear all';
+
+const errMessage = document.createElement('p');
+errMessage.classList.add('err-message');
+errMessage.setAttribute('id', 'err');
+
 const listRef = document.createElement('ul');
+
+
+
 
 // app.appendChild(inputRef);
 // app.appendChild(addRef);
 // app.appendChild(clearRef);
 // app.appendChild(listRef);
 
-app.append(inputRef, addRef, clearRef, listRef);
+app.append(inputRef, addRef, clearRef, errMessage, listRef);
 
-let dataNumb = 0;
-let valueMemory = '';
+let idCounter = 0;
+let inputValidValue = '';
+let editableValidValue = ''
+// let valid;
 let state = [];
+
 state = JSON.parse(localStorage.getItem('state')) || [];
 console.log(state)
 renderLi();
 
 
-addRef.addEventListener('click', () => {
-    addTodoHandler(inputRef.value)
-});
-
+inputRef.addEventListener('input', validationInput);
+addRef.addEventListener('click', addTodoHandler);
 clearRef.addEventListener('click', clearAll);
 
 
-function clearAll() {
+function validationInput(event) {
+    console.log(event);
+    if (event.target.name == 'editable') {
+        editableValidValue = undefined;
+    } else {
+        inputValidValue = undefined;
+    }
+
+    event.target.parentElement.children.err.innerHTML = '';
+    const inputValue = event.target.value;
+    // console.log(inputValue);
+    const validStr = '!@#$%^&*()_+';
+
+    for (let i = 0; i < inputValue.length; i++) {
+        if (validStr.includes(inputValue[i])) {
+            let span = document.createElement('span');
+            span.innerText = '*Only numbers and letters!';
+            event.target.parentElement.children.err.appendChild(span);
+            return;
+        }
+    }
+
+    if (event.target.name == 'editable') {
+        editableValidValue = inputValue;
+        console.log(editableValidValue);
+    } else {
+        inputValidValue = inputValue;
+        console.log(inputValidValue);
+    }
+    
+}
+
+
+
+function clearAll(event) {
+    console.log(event)
+
+    event.target.parentElement.children.err.innerHTML = '';
     state = [];
+    idCounter = 0;
     // console.log(state);
     localStorage.clear();
     inputRef.value = '';
+    inputValidValue = '';
+    editableValidValue = '';
     renderLi();
 }
 
-function addTodoHandler(value, numb) {
+function addTodoHandler() {
+    if (inputValidValue === undefined) {
+        return;
+    }
+
+    // if (!valid) {
+    //     return;
+    // }
+
     state.push({
-        text: value,
+        text: inputValidValue,
+        // text: valid,
         checked: false,
         editable: false,
-        id: dataNumb,
+        id: idCounter,
     })
 
     inputRef.value = '';
-    dataNumb++;
+    inputValidValue = '';
+    // editableValidValue = '';
+    idCounter++;
 
     localStorage.setItem('state', JSON.stringify(state));
     renderLi();
@@ -156,6 +219,10 @@ function editHandler(event) {
 // }
 
 function saveHandler(event) {
+    if (editableValidValue === undefined) {
+        return;
+    }
+
     console.log(this.parentElement.children[0].value);
     // console.log(this)
     // state.map((item) => {
@@ -166,6 +233,7 @@ function saveHandler(event) {
     //     return item;
     // })
 
+    
     let liObj = state.find((item) => {
         return item.id == this.parentElement.dataset.id
     })
@@ -173,6 +241,9 @@ function saveHandler(event) {
     liObj.text = this.parentElement.children[0].value;
     liObj.editable = false;
     
+    // inputValidValue = '';
+    editableValidValue = '';
+
     localStorage.setItem('state', JSON.stringify(state));
     renderLi();
     console.log(state);
@@ -184,6 +255,9 @@ function cancelHandler() {
     })
 
     liObj.editable = !liObj.editable;
+
+    // inputValidValue = '';
+    editableValidValue = '';
 
     localStorage.setItem('state', JSON.stringify(state));
     renderLi();
@@ -214,8 +288,9 @@ function createEditableLi(text, id) {
     liRef.setAttribute('data-id', `${id}`)
 
     const editInputRef = document.createElement('input');
+    editInputRef.setAttribute('name', 'editable')
     editInputRef.value = text;
-    // editInputRef.addEventListener('change', changeHandler)
+    editInputRef.addEventListener('input', validationInput);
     
     const saveRef = document.createElement('button');
     saveRef.innerText = 'Save';
@@ -225,11 +300,15 @@ function createEditableLi(text, id) {
     cancelRef.innerText = 'Cancel';
     cancelRef.addEventListener('click', cancelHandler);
 
+    const errMessage = document.createElement('p');
+    errMessage.classList.add('err-message');
+    errMessage.setAttribute('id', 'err');
+
     // const editLiRef = listRef.querySelector(`[data-id='${id}']`);
     // editLiRef.innerHTML = '';
     // editLiRef.append(editInputRef, saveRef, cancelRef);
 
-    liRef.append(editInputRef, saveRef, cancelRef);
+    liRef.append(editInputRef, saveRef, cancelRef, errMessage);
     
     return liRef;
   
@@ -284,3 +363,4 @@ function renderLi() {
 
     console.log(state)
 }
+
