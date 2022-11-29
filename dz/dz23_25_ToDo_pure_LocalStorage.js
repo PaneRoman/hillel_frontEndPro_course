@@ -60,17 +60,16 @@ function validationInput(event) {
 
     if (event.target.name == 'editable') {
         editableValidValue = inputValue;
-        console.log(editableValidValue);
+        // console.log(editableValidValue);
     } else {
         inputValidValue = inputValue;
-        console.log(inputValidValue);
+        // console.log(inputValidValue);
     }
 }
 
 
 function clearAll(event) {
-    console.log(event)
-
+    // console.log(event)
     event.target.parentElement.children.err.innerHTML = '';
     state = [];
     idCounter = 0;
@@ -106,13 +105,12 @@ function addTodoHandler() {
 
 
 function removeElementHandler(event) {
-    console.log(event);
-    console.dir(this);
-    
-    console.log(this.parentElement.dataset.id)
+    // console.log(event);
+    // console.dir(this);
+    // console.log(this.parentElement.dataset.id)
 
     state = state.filter((item) => {
-        console.log(this.parentElement.dataset.id)
+        // console.log(this.parentElement.dataset.id)
         return item.id != this.parentElement.dataset.id
     })
 
@@ -129,8 +127,8 @@ function removeElementHandler(event) {
 
 
 function editHandler(event) {
-    console.log(event);
-    console.dir(this);
+    // console.log(event);
+    // console.dir(this);
     
     state.map((item) => {
         if (item.id == this.parentElement.dataset.id) {
@@ -153,7 +151,7 @@ function saveHandler(event) {
         return;
     }
 
-    console.log(this.parentElement.children[0].value);
+    // console.log(this.parentElement.children[0].value);
     // console.log(this)
         
     let liObj = state.find((item) => {
@@ -189,8 +187,8 @@ function cancelHandler() {
 
 
 function checkboxHandler(event) {
-    console.log(event);
-    console.dir(this);
+    // console.log(event);
+    // console.dir(this);
 
     let liObj = state.find((item) => {
         return item.id == this.parentElement.dataset.id
@@ -258,11 +256,8 @@ function createLi(text, id, checked) {
 
 
 function renderLi() {
-    // const liRef = createLi();
-    // listRef.appendChild(liRef);
     listRef.innerHTML = '';
-    // const liRef;
-
+   
     state.forEach((item) => {
         if (!item.editable) {
             const liRef = createLi(item.text, item.id, item.checked);
@@ -271,7 +266,7 @@ function renderLi() {
             const liRef = createEditableLi(item.text, item.id);
             listRef.append(liRef);
         }
-        // const liRef = createLi(item.text, item.id);
+        
     })
 
     console.log(state)
