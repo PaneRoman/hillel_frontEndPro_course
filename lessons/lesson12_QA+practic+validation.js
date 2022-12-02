@@ -88,3 +88,40 @@ const ulRef = document.createElement('ul');
 document.body.appendChild(ulRef);
 
 recursionRenderTree(data, ulRef);
+
+
+// Validation
+
+const inputTest = document.createElement('input');
+inputTest.addEventListener('input', validHandler);
+// inputTest.addEventListener('keydown', validHandler);
+
+document.body.appendChild(inputTest);
+
+
+// //'input' Listner
+function validHandler(event) {
+    console.log(event);
+    if (isNaN(+event.data)) {
+        console.log('true', event.data);
+    } else {
+       event.preventDefault();
+       console.log('false', event.data);
+    }
+} // preventDefault() ne uspevaet otrabativat` tak kak nugno. V input 
+//// yspevaet zapisat`sa zna4enie
+
+
+// //'keydown' Listner
+// function validHandler(event) {
+//     console.log(event);
+//     if (isNaN(+event.key)) {
+//         console.log('true', event.key);
+//     } else {
+//        event.preventDefault();
+//        console.log('false', event.key);
+//     }
+// } // preventDefault() uspevaet otrabativat` i otmenit` povedenie, i
+// // popadanie zha4enija v input
+
+
