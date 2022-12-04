@@ -111,3 +111,48 @@ const payCount2 = bill.detail.apply(bill, ['pizza', 'salad', 1000]);
 console.log(pay);
 console.log(payCount);
 console.log(payCount2);
+
+
+
+
+const user = {
+    name: 'Dmitro',
+    age: 25,
+    sex: 'mael',
+    id: 2
+}
+
+const fn = function () {
+    console.log(this);
+    console.log(`${this.name},${this.age},${this.sex},${this.id}`);
+}.bind(user);
+
+fn();
+// fn()
+
+
+
+//Prosto Zada4ka. Nauti Unikalnie zna4enija (zna4enija v edini4nom ekzempljre)
+const arr = [1,1,2,3,3,3,4,5,6,6,7];
+
+function findUnique(array) {
+    let uniqueObj = {};
+    let uniqueArr = [];
+    for (let i = 0; i < array.length; i++) {
+        if (!uniqueObj[array[i]]) {
+            uniqueObj[array[i]] = 1;
+        } else {
+            uniqueObj[array[i]] = uniqueObj[array[i]] + 1;
+        }
+    }
+
+    for (const key in uniqueObj) {
+        if (uniqueObj[key] === 1) {
+            uniqueArr.push(key)
+        }
+    }
+
+    return uniqueArr;
+}
+
+console.log(findUnique(arr));
