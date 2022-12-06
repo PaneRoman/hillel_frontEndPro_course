@@ -8,6 +8,10 @@
     position: relative;
 }
 
+body>ul {
+    margin-left: 20px;
+}
+
 .myClass {
     background: red;;
 }
@@ -50,6 +54,7 @@ tr, td{
 
 #whether-app {
     margin-top: 20px;
+    margin-bottom: 30px;
 }
 
 .weather-header {
