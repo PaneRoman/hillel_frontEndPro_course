@@ -174,3 +174,33 @@ function animation() {
 }
 
 animation();
+
+
+// Считаем Факториал числа при помощи Рекурсии
+
+// 5! = 1 * 2 * 3 * 4 * 5
+// 4! = 1 * 2 * 3 * 4
+
+//Cycle
+function factorialCalc(n) {
+    let s = 1;
+    for (let i = 1; i <= n; i++) {
+        s = s * i;
+        
+    }
+    return s;
+}
+
+console.log(factorialCalc(10));
+
+
+//Recursion
+function factorialCalc2(n) {
+    if (n === 1) {
+        return 1;
+    } else {
+        return n * factorialCalc2(n - 1);
+    }
+}
+
+console.log(factorialCalc2(10))
