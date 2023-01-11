@@ -1,45 +1,49 @@
-// Add Fetch Request
+// Add Fetch Request from jsonholder server
+
 
 const app = document.querySelector('#app');
 const addWrap = document.querySelector('.add-wrap');
 
-
+// Create Input Field
 const inputRef = document.createElement('input');
 inputRef.setAttribute('name', 'add');
 
+// Create Add Button
 const addRef = document.createElement('button');
 addRef.innerText = 'Add';
 
+// Create Clear Button
 const clearRef = document.createElement('button');
 clearRef.innerText = 'Clear all';
 
+// Create Error Message Paragraph
 const errMessage = document.createElement('p');
 errMessage.classList.add('err-message');
 errMessage.setAttribute('id', 'err');
 
-// Add Search input field
+// Create Search input field
 const searchRef = document.createElement('input');
 searchRef.setAttribute('type', 'search');
 searchRef.setAttribute('placeholder', 'search...');
 
-// Add Sort selection
+// Create Sort selection
 const sortSelect = document.createElement('select');
 sortSelect.setAttribute('name', 'sort');
 sortSelect.setAttribute('id', 'sort');
 
 const selectOption1 = document.createElement('option');
-selectOption1.innerText = 'From Max Id to';
-selectOption1.setAttribute('value', 'maxTo');
+selectOption1.innerText = 'From Min Id to';
+selectOption1.setAttribute('value', 'minTo');
 
 const selectOption2 = document.createElement('option');
-selectOption2.innerText = 'From Min Id to';
-selectOption2.setAttribute('value', 'minTo');
-selectOption2.setAttribute('selected', '');
+selectOption2.innerText = 'From Max Id to';
+selectOption2.setAttribute('value', 'maxTo');
 
-// Add Search message
+// Create Search Message Paragraph
 const searchMessage = document.createElement('p');
 searchMessage.innerText = 'Can not search nothing!';
 
+// Create ul
 const listRef = document.createElement('ul');
 
 
@@ -54,18 +58,136 @@ let editableValidValue = '';
 let state = [];
 let filteredState = [];
 
+
 // let testArr = [32, 8, 1, 15, 58]
 
 state = JSON.parse(localStorage.getItem('state')) || [];
-console.log(state)
+// console.log(state);
 renderLi();
+
+renderApp();
 
 
 inputRef.addEventListener('input', validationInput);
 addRef.addEventListener('click', addTodoHandler);
 clearRef.addEventListener('click', clearAll);
 searchRef.addEventListener('input', searchText);
-sortSelect.addEventListener('input', sortToDoList)
+sortSelect.addEventListener('input', sortToDoList);
+
+
+
+async function renderApp() {
+    try {
+        state = await getInitialData();
+        console.log('stateRender>>>', state);
+        localStorage.setItem('state', JSON.stringify(state));
+        renderLi();
+
+    } catch (err) {
+        console.warn('getInitDataERROR>>>', err);
+
+        // Create Error Modal Window
+        // const windowType = 'error';
+        // const errorModalWindow = createModalWindow(windowType);
+        // const errorMessage = createErrorMessage(err);
+        
+        // const headerPar = document.createElement('p');
+        // headerPar.innerText = 'Oooooops!';
+        // const messagePar = document.createElement('p');
+        // messagePar.innerText = err;
+
+        // errorModalWindow.append(...errorMessage);
+        const errWarning = createErrModalWindow(err);
+        app.append(errWarning);
+    }
+    
+}
+
+
+async function showTodoInfo(event) {
+    console.log('showTodoInfo');
+    console.log(event);
+    // Delete Previous Modal Window
+    // const prevModalWindow = app.querySelector('.modal-window');
+    // if (prevModalWindow) {
+    //     prevModalWindow.remove();
+    // }
+    // console.log(prevModalWindow)
+    // console.dir([...app.children]);
+        
+      
+    // Create Modal Window
+    // const modalWindow = document.createElement('div');
+    // modalWindow.classList.add('modal-window');
+    // // modalWindow.setAttribute('style', `left: ${event.pageX}px; top: ${event.pageY}px`)
+    // const closeCross = document.createElement('div');
+    // closeCross.classList.add('close');
+    // closeCross.addEventListener('click', removeModalWindow);
+
+    // modalWindow.append(closeCross);
+    
+    // Get Data From Server
+    const data = await getInitialData();
+    console.log('showData>>>', data);
+
+    // Find liObject
+    const liDataId = event.target.parentElement.dataset.id;
+    const liObj = data.find((item) => item.id == liDataId);
+    
+    // Create Info Modal Window
+    const windowType = 'info';
+    const infoModalWindow = createModalWindow(windowType);
+
+    // Create Info Paragraphs
+    for (const key in liObj) {
+        const paragraph = document.createElement('p');
+        paragraph.innerText = `${key}: ${liObj[key]}`
+        infoModalWindow.append(paragraph);
+    }
+
+    app.append(infoModalWindow);
+}
+
+function createModalWindow(type) {
+    // const className = `modal-window-${type}`;
+    const prevModalWindow = app.querySelector('.modal-window');
+    if (prevModalWindow) {
+        prevModalWindow.remove();
+    }
+
+    const modalWindow = document.createElement('div');
+    modalWindow.classList.add('modal-window', type);
+
+    const closeCross = document.createElement('div');
+    closeCross.classList.add('close');
+
+    closeCross.addEventListener('click', () => {
+        app.querySelector('.modal-window').remove();
+    });
+
+    modalWindow.append(closeCross);
+
+    return modalWindow;
+}
+
+function createErrModalWindow(errMessage) {
+    const windowType = 'error';
+    const errorModalWindow = createModalWindow(windowType);
+
+    // Create Error Paragraphs
+    const headerPar = document.createElement('p');
+    headerPar.innerText = 'Oooooops!';
+    const messagePar = document.createElement('p');
+    messagePar.innerText = errMessage;
+
+    errorModalWindow.append(headerPar, messagePar);
+
+    return errorModalWindow;
+}
+
+// function removeModalWindow() {
+//     app.querySelector('.modal-window').remove();
+// }
 
 
 function sortToDoList(event) {
@@ -95,15 +217,17 @@ function sortToDoList(event) {
 }
 
 function nonInvertSort(a, b) {
-    if (a.id > b.id) return 1;
-    if (a.id < b.id) return -1;
-    if (a.id == b.id) return 0;
+    // if (a.id > b.id) return 1;
+    // if (a.id < b.id) return -1;
+    // if (a.id == b.id) return 0;
+    return a.id - b.id
 }
 
 function invertSort(a, b) {
-    if (a.id < b.id) return 1;
-    if (a.id > b.id) return -1;
-    if (a.id == b.id) return 0;
+    // if (a.id < b.id) return 1;
+    // if (a.id > b.id) return -1;
+    // if (a.id == b.id) return 0;
+    return b.id - a.id
 }
 
 // function searchText(event) {
@@ -118,6 +242,7 @@ function invertSort(a, b) {
 //     }, 1000)
     
 // }
+
 
 async function searchText (event) {
     console.log(event)
@@ -249,23 +374,29 @@ function clearAll(event) {
 
 
 async function addTodoHandler() {  //Asynchronniu variant funkcii addTodoHandler()
-    if (inputValidValue === undefined) {
-        return;
+    try {
+        if (inputValidValue === undefined) {
+            return;
+        }
+    
+        const response = await createToDo(inputValidValue); // createToDo() vozvrawaet Promise
+        console.log('response>>>', response); // Blagodarja await polu4aem srazu dannie
+        response.id += idCounter;
+        state.push(response)
+    
+        localStorage.setItem('state', JSON.stringify(state));
+        renderLi();
+    
+        inputRef.value = '';
+        inputValidValue = '';
+        editableValidValue = '';
+        idCounter++; 
+
+    } catch (err) {
+        console.warn('createDataERROR>>>', err);
+        const errWarning = createErrModalWindow(err);
+        app.append(errWarning);
     }
-
-    const response = await createToDo(inputValidValue); // createToDo() vozvrawaet Promise
-    console.log('response>>>', response); // Blagodarja await polu4aem srazu dannie
-    response.id += idCounter;
-    state.push(response)
-
-    localStorage.setItem('state', JSON.stringify(state));
-    renderLi();
-
-    inputRef.value = '';
-    inputValidValue = '';
-    editableValidValue = '';
-    idCounter++;
-
 }
 
 
@@ -273,6 +404,8 @@ function removeElementHandler(event) {
     // console.log(event);
     // console.dir(this);
     // console.log(this.parentElement.dataset.id)
+    const liChildren = [...this.parentElement.children];
+    liChildren.forEach((item) => item.setAttribute('disabled', ''));
 
     const liDataId = this.parentElement.dataset.id;
 
@@ -318,7 +451,13 @@ function removeElementHandler(event) {
             
             // renderLi();
         })
-        .catch(err => console.warn('delERROR>>>', err))
+        .catch(err => {
+            console.warn('delERROR>>>', err);
+            const errWarning = createErrModalWindow(err);
+            app.append(errWarning);
+
+            liChildren.forEach((item) => item.removeAttribute('disabled', ''));
+        })
 
     // localStorage.setItem('state', JSON.stringify(state));
     
@@ -363,15 +502,16 @@ function saveHandler(event) {
         return;
     }
 
+    // console.log(event);
     // console.log(this.parentElement.children[0].value);
     console.dir(this.parentElement.children)
     console.log(event)
 
     // const liChildren = this.parentElement.children;
     const liChildren = [...this.parentElement.children];
-    console.dir(liChildren)
+    console.dir(liChildren);
 
-    liChildren.forEach((item) => item.setAttribute('disabled', ''))
+    liChildren.forEach((item) => item.setAttribute('disabled', ''));
 
     // for (let i = 0; i < children.length; i++) {
     //     children[i].setAttribute('disabled', '')
@@ -408,10 +548,16 @@ function saveHandler(event) {
             // renderLi();
             editableValidValue = '';
         })
-        .catch(err => console.warn('updateERROR>>>', err))
+        .catch(err => {
+            console.warn('updateERROR>>>', err);
+            const errWarning = createErrModalWindow(err);
+            app.append(errWarning);
+
+            liChildren.forEach((item) => item.removeAttribute('disabled', ''))
+        })
     
     // editableValidValue = '';
-
+    
 }
 
 
@@ -465,7 +611,13 @@ function checkboxHandler(event) { //Common Function variant checkboxHandler() + 
             (filteredState.length) ? renderLi(filteredState) : renderLi();
             // renderLi();
         })
-        .catch(err => console.warn('updateERROR>>>', err))
+        .catch(err => {
+            console.warn('updateERROR>>>', err);
+            const errWarning = createErrModalWindow(err);
+            app.append(errWarning);
+
+            liChildren.forEach((item) => item.removeAttribute('disabled', ''));
+        })
 }
 
 // async function checkboxHandler(event) { //Async Function variant checkboxHandler()
@@ -497,22 +649,28 @@ function createEditableLi(title, id) {
     const liRef = document.createElement('li');
     liRef.setAttribute('data-id', `${id}`)
 
+    // Create Editable Input
     const editInputRef = document.createElement('input');
     editInputRef.setAttribute('name', 'editable')
     editInputRef.value = title;
-    editInputRef.addEventListener('input', validationInput);
     
+    // Create Save Button
     const saveRef = document.createElement('button');
     saveRef.innerText = 'Save';
-    saveRef.addEventListener('click', saveHandler);
-
+    
+    // Create Cancel Button
     const cancelRef = document.createElement('button');
     cancelRef.innerText = 'Cancel';
-    cancelRef.addEventListener('click', cancelHandler);
-
+    
+    // Create Error Message Paragraph
     const errMessage = document.createElement('p');
     errMessage.classList.add('err-message');
     errMessage.setAttribute('id', 'err');
+
+
+    editInputRef.addEventListener('input', validationInput);
+    saveRef.addEventListener('click', saveHandler);
+    cancelRef.addEventListener('click', cancelHandler);
 
     liRef.append(editInputRef, saveRef, cancelRef, errMessage);
     
@@ -522,26 +680,36 @@ function createEditableLi(title, id) {
 
 function createLi(title, id, completed) {
 
+    // Create Li
     const liRef = document.createElement('li');
     liRef.setAttribute('data-id', `${id}`)
 
+    // Create Checkbox
     const checkBoxRef = document.createElement('input');
     checkBoxRef.setAttribute('type', 'checkbox');
     if (completed) {
         checkBoxRef.setAttribute('checked', '');
     }
+
+    // Create Span
+    const spanRef = document.createElement('span');
+    spanRef.innerText = title;
     
-    checkBoxRef.addEventListener('click', checkboxHandler);
-    
+    // Create Edit Button
     const editRef = document.createElement('button');
     editRef.innerText = 'Edit';
-    editRef.addEventListener('click', editHandler);
 
+    // Create Remove Button
     const removeRef = document.createElement('button');
     removeRef.innerText = 'Remove';
+
+
+    spanRef.addEventListener('click', showTodoInfo);
+    checkBoxRef.addEventListener('click', checkboxHandler);
+    editRef.addEventListener('click', editHandler);
     removeRef.addEventListener('click', removeElementHandler);
 
-    liRef.append(checkBoxRef, title, editRef, removeRef);
+    liRef.append(checkBoxRef, spanRef, editRef, removeRef);
     
     return liRef;
 }
@@ -565,19 +733,29 @@ function renderLi(renderState = state) {
 }
 
 function getInitialData() {
-    fetch('https://jsonplaceholder.typicode.com/users/1/todos')
-    .then((response) => response.json())
-    .then((data) => {
-        state = data.map((item) => {
-            return {...item, editable: false, filtered: false}
+    return fetch('https://jsonplaceholder.typicode.com/users/1/todos')
+        .then((response) => {
+            if (!response.ok) {
+                // make the promise be rejected if we didn't get a 2xx response
+                throw new Error(`Not 2xx response! ResponseStatus is ${response.status}`);
+            } else {
+                // got the desired response
+            return response;
+            }
         })
-        localStorage.setItem('state', JSON.stringify(state));
-        renderLi();
-    })
-    .catch(err => console.warn('initERROR>>>', err))
+        .then((response) => response.json())
+        .then((data) => {
+            return data.map((item) => {
+                return {...item, editable: false, filtered: false}
+            })
+        
+            // localStorage.setItem('state', JSON.stringify(state));
+            // renderLi();
+        })
+        // .catch(err => console.warn('initERROR>>>', err))
 }
 
-getInitialData();
+// getInitialData();
 
 function updateData(id, obj) { //obj - ver.1; (obj, propName, value) - ver.2  (id, obj) - ver.3 final
     return fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
@@ -621,8 +799,17 @@ function deleteData(id) {
     return fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
         method: 'DELETE',
     })
-        .then((response) => response.json())
-        // .then((deleted) => console.log('deleted>>>', deleted))
+        .then((response) => {
+            if (!response.ok) {
+                // make the promise be rejected if we didn't get a 2xx response
+                throw new Error(`Not 2xx response! ResponseStatus is ${response.status}`);
+            } else {
+                // got the desired response
+                return response;
+            }
+        })
+            .then((response) => response.json())
+            // .then((deleted) => console.log('deleted>>>', deleted))
 }
 
 // Perviu variant
@@ -662,6 +849,15 @@ function createToDo(value) {
         headers: {
             'Content-type': 'application/json; charset=UTF-8',
         },
+    })
+        .then((response) => {
+            if (!response.ok) {
+                // make the promise be rejected if we didn't get a 2xx response
+                throw new Error(`Not 2xx response! ResponseStatus is ${response.status}`);
+            } else {
+                // got the desired response
+                return response;
+            }
     })
         .then((response) => response.json())
 }
