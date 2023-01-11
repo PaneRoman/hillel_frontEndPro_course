@@ -59,21 +59,16 @@ let state = [];
 let filteredState = [];
 
 
-// let testArr = [32, 8, 1, 15, 58]
-
 state = JSON.parse(localStorage.getItem('state')) || [];
-console.log('state', state);
 renderLi();
 
 renderApp();
-
 
 inputRef.addEventListener('input', validationInput);
 addRef.addEventListener('click', addTodoHandler);
 clearRef.addEventListener('click', clearAll);
 searchRef.addEventListener('input', searchText);
 sortSelect.addEventListener('input', sortToDoList);
-
 
 
 async function renderApp() {
@@ -85,18 +80,6 @@ async function renderApp() {
 
     } catch (err) {
         console.warn('getInitDataERROR>>>', err);
-
-        // Create Error Modal Window
-        // const windowType = 'error';
-        // const errorModalWindow = createModalWindow(windowType);
-        // const errorMessage = createErrorMessage(err);
-        
-        // const headerPar = document.createElement('p');
-        // headerPar.innerText = 'Oooooops!';
-        // const messagePar = document.createElement('p');
-        // messagePar.innerText = err;
-
-        // errorModalWindow.append(...errorMessage);
         const errWarning = createErrModalWindow(err);
         app.append(errWarning);
     }
@@ -107,25 +90,7 @@ async function renderApp() {
 async function showTodoInfo(event) {
     console.log('showTodoInfo');
     console.log(event);
-    // Delete Previous Modal Window
-    // const prevModalWindow = app.querySelector('.modal-window');
-    // if (prevModalWindow) {
-    //     prevModalWindow.remove();
-    // }
-    // console.log(prevModalWindow)
-    // console.dir([...app.children]);
         
-      
-    // Create Modal Window
-    // const modalWindow = document.createElement('div');
-    // modalWindow.classList.add('modal-window');
-    // // modalWindow.setAttribute('style', `left: ${event.pageX}px; top: ${event.pageY}px`)
-    // const closeCross = document.createElement('div');
-    // closeCross.classList.add('close');
-    // closeCross.addEventListener('click', removeModalWindow);
-
-    // modalWindow.append(closeCross);
-    
     // Get Data From Server
     const data = await getInitialData();
     console.log('showData>>>', data);
@@ -148,8 +113,8 @@ async function showTodoInfo(event) {
     app.append(infoModalWindow);
 }
 
+
 function createModalWindow(type) {
-    // const className = `modal-window-${type}`;
     const prevModalWindow = app.querySelector('.modal-window');
     if (prevModalWindow) {
         prevModalWindow.remove();
@@ -185,10 +150,6 @@ function createErrModalWindow(errMessage) {
     return errorModalWindow;
 }
 
-// function removeModalWindow() {
-//     app.querySelector('.modal-window').remove();
-// }
-
 
 function sortToDoList(event) {
     console.log('sortEvent', event);
@@ -217,31 +178,12 @@ function sortToDoList(event) {
 }
 
 function nonInvertSort(a, b) {
-    // if (a.id > b.id) return 1;
-    // if (a.id < b.id) return -1;
-    // if (a.id == b.id) return 0;
     return a.id - b.id
 }
 
 function invertSort(a, b) {
-    // if (a.id < b.id) return 1;
-    // if (a.id > b.id) return -1;
-    // if (a.id == b.id) return 0;
     return b.id - a.id
 }
-
-// function searchText(event) {
-//     setTimeout(() => {
-//     console.log('searchValue>>', event.target.value);
-//         const searched = event.target.value;
-//         const filteredState = state.filter((item) => {
-//             return item.title.includes(searched);    
-//         })
-//         console.log('filteredState', filteredState);
-//         renderLi(filteredState);
-//     }, 1000)
-    
-// }
 
 
 async function searchText (event) {
@@ -286,8 +228,7 @@ async function searchText (event) {
         searchRef.addEventListener('input', searchText);
         return;
     }
-    
-    // searchRef.addEventListener('input', searchText);
+   
 }
 
 
@@ -315,62 +256,22 @@ function validationInput(event) {
 
     if (event.target.name == 'editable') {
         editableValidValue = inputValue;
-        // console.log(editableValidValue);
     } else {
         inputValidValue = inputValue;
-        // console.log(inputValidValue);
     }
 }
 
 
 function clearAll(event) {
-    // console.log(event)
     event.target.parentElement.children.err.innerHTML = '';
     state = [];
     idCounter = 0;
-    // console.log(state);
     localStorage.clear();
     inputRef.value = '';
     inputValidValue = '';
     editableValidValue = '';
     renderLi();
 }
-
-
-// function addTodoHandler() {
-//     if (inputValidValue === undefined) {
-//         return;
-//     }
-
-//     // state.push({
-//     //     title: inputValidValue,
-//     //     completed: false,
-//     //     editable: false,
-//     //     id: idCounter,
-//     // });
-
-//     // createToDo(inputValidValue); // Perviu variant
-
-//     const response = createToDo(inputValidValue); // Vtorou variant
-//     console.log('response', response);
-//     response
-//         .then((data) => {
-//             data.id += idCounter;
-//             state.push(data)
-//         })
-//         .then(() => {
-//             renderLi();
-//             localStorage.setItem('state', JSON.stringify(state));
-//         });
-
-//     inputRef.value = '';
-//     inputValidValue = '';
-//     editableValidValue = '';
-//     idCounter++;
-
-//     // localStorage.setItem('state', JSON.stringify(state));
-//     // renderLi();
-// }
 
 
 async function addTodoHandler() {  //Asynchronniu variant funkcii addTodoHandler()
@@ -401,9 +302,6 @@ async function addTodoHandler() {  //Asynchronniu variant funkcii addTodoHandler
 
 
 function removeElementHandler(event) {
-    // console.log(event);
-    // console.dir(this);
-    // console.log(this.parentElement.dataset.id)
     const liChildren = [...this.parentElement.children];
     liChildren.forEach((item) => item.setAttribute('disabled', ''));
 
@@ -441,15 +339,6 @@ function removeElementHandler(event) {
                 renderLi();
             }
 
-            // state = state.filter((item) => {
-            //     return item.id != liDataId;
-            // })
-            
-            // console.log('updatedState2>>>', state);
-            // localStorage.setItem('state', JSON.stringify(state));
-            // if (state.length == 0) localStorage.clear();
-            
-            // renderLi();
         })
         .catch(err => {
             console.warn('delERROR>>>', err);
@@ -459,41 +348,18 @@ function removeElementHandler(event) {
             liChildren.forEach((item) => item.removeAttribute('disabled', ''));
         })
 
-    // localStorage.setItem('state', JSON.stringify(state));
-    
-    // if (state.length == 0) {
-    //     localStorage.clear();
-    // }
-
-    // renderLi();
-    // this.parentElement.remove();
-    // console.log(state)
 }
 
 
 function editHandler(event) {
-    // console.log(event);
-    // console.dir(this);
     const liDataId = this.parentElement.dataset.id;
 
-    state.forEach((item) => {
-        // if (item.id == this.parentElement.dataset.id) {
-        //     item.editable = true;
-        //     // return item;
-        // } else {
-        //     item.editable = false;
-        //     // return item;
-        // }
-        
-        (item.id == liDataId) ? item.editable = true : item.editable = false
-        
-    })
+    state.forEach(item => (item.id == liDataId) ? item.editable = true : item.editable = false)
 
     localStorage.setItem('state', JSON.stringify(state));
 
     (filteredState.length) ? renderLi(filteredState) : renderLi();
 
-    // renderLi();
 }
 
 
@@ -502,38 +368,21 @@ function saveHandler(event) {
         return;
     }
 
-    // console.log(event);
-    // console.log(this.parentElement.children[0].value);
     console.dir(this.parentElement.children)
     console.log(event)
 
-    // const liChildren = this.parentElement.children;
     const liChildren = [...this.parentElement.children];
     console.dir(liChildren);
 
-    liChildren.forEach((item) => item.setAttribute('disabled', ''));
-
-    // for (let i = 0; i < children.length; i++) {
-    //     children[i].setAttribute('disabled', '')
-    //     console.log(children[i])
-        
-    // }
-
-    // event.target.setAttribute('disabled', '');
-    // event.target.nextElementSibling.setAttribute('disabled', '');
-    // event.target.previousElementSibling.setAttribute('disabled', '');
+    liChildren.forEach(item => item.setAttribute('disabled', ''));
 
     const currentInputValue = this.parentElement.children[0].value;
     const liDataId = this.parentElement.dataset.id;
 
-    const liObj = state.find((item) => {
-        return item.id == liDataId;
-    })
+    const liObj = state.find(item => item.id == liDataId);
 
-    // liObj.title = currentInputValue;
-    // liObj.editable = false;
     console.log('nonUpdatedState>>', state);
-    // const response = updateData(liObj, 'title', currentInputValue); // ver.2
+
     const response = updateData(liObj.id, {...liObj, title: currentInputValue});
     response
         .then((data) => {
@@ -555,9 +404,7 @@ function saveHandler(event) {
 
             liChildren.forEach((item) => item.removeAttribute('disabled', ''))
         })
-    
-    // editableValidValue = '';
-    
+ 
 }
 
 
@@ -568,12 +415,11 @@ function cancelHandler() {
 
     liObj.editable = !liObj.editable;
 
-    // inputValidValue = '';
     editableValidValue = '';
 
     localStorage.setItem('state', JSON.stringify(state));
     (filteredState.length) ? renderLi(filteredState) : renderLi();
-    // renderLi();
+    
     console.log(state);
 }
 
@@ -586,30 +432,20 @@ function checkboxHandler(event) { //Common Function variant checkboxHandler() + 
     const liChildren = [...this.parentElement.children];
     liChildren.forEach((item) => item.setAttribute('disabled', ''));
 
-    // event.target.setAttribute('disabled', '');
-    // event.target.nextElementSibling.setAttribute('disabled', '');
-    // event.target.nextElementSibling.nextElementSibling.setAttribute('disabled', '');
-    // event.target.removeEventListener('click', checkboxHandler);
     const liDataId = this.parentElement.dataset.id;
 
-    const liObj = state.find((item) => {
-        return item.id == liDataId;
-    })
+    const liObj = state.find(item => item.id == liDataId);
 
-    // liObj.completed = !liObj.completed;
     console.log('nonUpdatedState>>', state);
 
-    // const response = updateData(liObj, 'complited', liObj.completed); // ver.2
     const response = updateData(liObj.id, {...liObj, completed: !liObj.completed});
     response
-        // .then((updated) => console.log('updated>>>', updated))
         .then((data) => {
             console.log('updated>>>', data)
             liObj.completed = data.completed;
             console.log('updatedState>>>', state);
             localStorage.setItem('state', JSON.stringify(state));
             (filteredState.length) ? renderLi(filteredState) : renderLi();
-            // renderLi();
         })
         .catch(err => {
             console.warn('updateERROR>>>', err);
@@ -620,30 +456,6 @@ function checkboxHandler(event) { //Common Function variant checkboxHandler() + 
         })
 }
 
-// async function checkboxHandler(event) { //Async Function variant checkboxHandler()
-//     // console.log(event);
-//     // console.dir(this);
-
-//     try {
-//        const liDataId = this.parentElement.dataset.id;
-
-//         const liObj = state.find((item) => {
-//             return item.id == liDataId;
-//         })
-
-//         // liObj.completed = !liObj.completed;
-//         console.log('nonUpdatedState>>', state);
-//         const response = await updateData(liObj, 'complited', liObj.completed);
-    
-//         console.log('updated>>>', response);
-//         liObj.completed = response.completed;
-//         console.log('updatedState>>>', state);
-//         localStorage.setItem('state', JSON.stringify(state)); 
-//     } catch (err) {
-//         console.warn('updateERROR>>>', err)
-//     }
-     
-// }
 
 function createEditableLi(title, id) {
     const liRef = document.createElement('li');
@@ -748,25 +560,15 @@ function getInitialData() {
             return data.map((item) => {
                 return {...item, editable: false, filtered: false}
             })
-        
-            // localStorage.setItem('state', JSON.stringify(state));
-            // renderLi();
-        })
-        // .catch(err => console.warn('initERROR>>>', err))
+        })    
 }
 
 // getInitialData();
 
-function updateData(id, obj) { //obj - ver.1; (obj, propName, value) - ver.2  (id, obj) - ver.3 final
+function updateData(id, obj) {
     return fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
         method: 'PUT',
         body: JSON.stringify({
-            // ...obj,     //ver.1
-            // completed: !obj.completed    //ver.1
-            // completed: (propName == 'complited' && typeof value == 'boolean') ? !obj.completed : obj.completed,  //ver.2
-            // title: (propName == 'title' && typeof value == 'string') ? value : obj.title   //ver.2
-
-            //ver.3
             title: obj.title,
             completed: obj.completed,
             editable: obj.editable,
@@ -786,13 +588,8 @@ function updateData(id, obj) { //obj - ver.1; (obj, propName, value) - ver.2  (i
                 return response;
             }
         })
-        // .then(async response => { //ispol'zyja AsyncFn i Await mogno obrabotat' Response metodom json(), ne vozvrawaja obratno v Promise
-        //     const json = await response.json();
-        //     console.log('json', json);
-        // })
         .then((response) => response.json())
-        // .then((updated) => console.log('updated>>>', updated))
-        // .catch(err => console.warn('updateERROR>>>', err))
+        
 }
 
 function deleteData(id) {
@@ -809,33 +606,8 @@ function deleteData(id) {
             }
         })
             .then((response) => response.json())
-            // .then((deleted) => console.log('deleted>>>', deleted))
 }
 
-// Perviu variant
-// function createToDo(value) {
-//     fetch('https://jsonplaceholder.typicode.com/todos', {
-//         method: 'POST',
-//         body: JSON.stringify({
-//             title: value,
-//             completed: false,
-//             editable: false,
-//             userId: 1,
-//         }),
-//         headers: {
-//             'Content-type': 'application/json; charset=UTF-8',
-//         },
-//     })
-//         .then((response) => response.json())
-//         .then((data) => {
-//             data.id += idCounter;
-//             state.push(data);
-//             localStorage.setItem('state', JSON.stringify(state));
-//             renderLi();
-//         })
-// }
-
-// Vtorou variant createToDO. 4erez return. Vozvrawaet Promise
 function createToDo(value) {
     return fetch('https://jsonplaceholder.typicode.com/todos', {
         method: 'POST',
