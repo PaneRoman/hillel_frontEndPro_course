@@ -88,12 +88,9 @@ async function renderApp() {
 
 
 async function showTodoInfo(event) {
-    console.log('showTodoInfo');
-    console.log(event);
-        
     // Get Data From Server
     const data = await getInitialData();
-    console.log('showData>>>', data);
+    // console.log('showServerData>>>', data);
 
     // Find liObject
     const liDataId = event.target.parentElement.dataset.id;
@@ -116,6 +113,7 @@ async function showTodoInfo(event) {
 
 function createModalWindow(type) {
     const prevModalWindow = app.querySelector('.modal-window');
+
     if (prevModalWindow) {
         prevModalWindow.remove();
     }
@@ -154,42 +152,31 @@ function createErrModalWindow(errMessage) {
 function sortToDoList(event) {
     console.log('sortEvent', event);
     if (event.target.value == 'maxTo' && !filteredState.length) {
-        state.sort(invertSort);
+        state.sort((a, b) => b.id - a.id); // Invert Sort
         renderLi();
         console.log('sortState', state);
     }
     if (event.target.value == 'maxTo' && filteredState.length) {
-        filteredState.sort(invertSort);
+        filteredState.sort((a, b) => b.id - a.id);  // Invert Sort
         renderLi(filteredState);
         console.log('sortState', filteredState);
     }
 
     if (event.target.value == 'minTo' && !filteredState.length) {
-        state.sort(nonInvertSort);
+        state.sort((a, b) => a.id - b.id); // nonInvert Sort
         renderLi();
         console.log('sortState', state);
     }
     if (event.target.value == 'minTo' && filteredState.length) {
-        filteredState.sort(nonInvertSort);
+        filteredState.sort((a, b) => a.id - b.id); // nonInvert Sort
         renderLi(filteredState);
         console.log('sortState', filteredState);
     }
   
 }
 
-function nonInvertSort(a, b) {
-    return a.id - b.id
-}
-
-function invertSort(a, b) {
-    return b.id - a.id
-}
-
 
 async function searchText (event) {
-    console.log(event)
-    console.dir(addWrap.children)
-
     searchRef.removeEventListener('input', searchText);
     const addElem = [...addWrap.children];
     addElem.forEach((item) => item.setAttribute('disabled', ''))
@@ -198,7 +185,7 @@ async function searchText (event) {
         setTimeout(resolve, 1000)
     })
 
-    console.log('searchValue>>', searchRef.value);
+    // console.log('searchValue>>', searchRef.value);
 
     const searched = searchRef.value;
     filteredState = state.filter((item) => {
@@ -207,7 +194,7 @@ async function searchText (event) {
         }
             
     })
-    console.log('filteredState', filteredState);
+    // console.log('filteredState', filteredState);
    
     if (filteredState.length) {
         renderLi(filteredState);
@@ -233,7 +220,6 @@ async function searchText (event) {
 
 
 function validationInput(event) {
-    console.log(event);
     if (event.target.name == 'editable') {
         editableValidValue = undefined;
     } else {
@@ -280,8 +266,8 @@ async function addTodoHandler() {  //Asynchronniu variant funkcii addTodoHandler
             return;
         }
     
-        const response = await createToDo(inputValidValue); // createToDo() vozvrawaet Promise
-        console.log('response>>>', response); // Blagodarja await polu4aem srazu dannie
+        const response = await createToDo(inputValidValue);
+        console.log('response>>>', response);
         response.id += idCounter;
         state.push(response)
     
@@ -307,7 +293,7 @@ function removeElementHandler(event) {
 
     const liDataId = this.parentElement.dataset.id;
 
-    console.log('nonUpdatedState>>', state);
+    // console.log('nonUpdatedState>>', state);
     const response = deleteData(liDataId);
     response
         .then((deleted) => console.log('deleted>>>', deleted))
@@ -318,7 +304,7 @@ function removeElementHandler(event) {
 
                 filteredState = filteredState.filter((item) => item.id != liDataId);
 
-                console.log('updatedState2>>>', state);
+                // console.log('updatedState2>>>', state);
                 localStorage.setItem('state', JSON.stringify(state));
                 if (state.length == 0) localStorage.clear();
 
@@ -332,7 +318,7 @@ function removeElementHandler(event) {
             } else {
                 state = state.filter((item) => item.id != liDataId);
 
-                console.log('updatedState2>>>', state);
+                // console.log('updatedState2>>>', state);
                 localStorage.setItem('state', JSON.stringify(state));
                 if (state.length == 0) localStorage.clear();
 
@@ -368,12 +354,8 @@ function saveHandler(event) {
         return;
     }
 
-    console.dir(this.parentElement.children)
-    console.log(event)
-
     const liChildren = [...this.parentElement.children];
-    console.dir(liChildren);
-
+   
     liChildren.forEach(item => item.setAttribute('disabled', ''));
 
     const currentInputValue = this.parentElement.children[0].value;
@@ -381,20 +363,19 @@ function saveHandler(event) {
 
     const liObj = state.find(item => item.id == liDataId);
 
-    console.log('nonUpdatedState>>', state);
+    // console.log('nonUpdatedState>>', state);
 
     const response = updateData(liObj.id, {...liObj, title: currentInputValue});
     response
         .then((data) => {
-            console.log('updated2>>>', data)
+            // console.log('updated2>>>', data)
             liObj.title = data.title;
             liObj.editable = false;
-            console.log('updatedState2>>>', state);
+            // console.log('updatedState2>>>', state);
         })
         .then(() => {
             localStorage.setItem('state', JSON.stringify(state));
             (filteredState.length) ? renderLi(filteredState) : renderLi();
-            // renderLi();
             editableValidValue = '';
         })
         .catch(err => {
@@ -402,16 +383,14 @@ function saveHandler(event) {
             const errWarning = createErrModalWindow(err);
             app.append(errWarning);
 
-            liChildren.forEach((item) => item.removeAttribute('disabled', ''))
+            liChildren.forEach((item) => item.removeAttribute('disabled', ''));
         })
  
 }
 
 
 function cancelHandler() {
-    let liObj = state.find((item) => {
-        return item.id == this.parentElement.dataset.id
-    })
+    let liObj = state.find(item => item.id == this.parentElement.dataset.id);
 
     liObj.editable = !liObj.editable;
 
@@ -420,14 +399,11 @@ function cancelHandler() {
     localStorage.setItem('state', JSON.stringify(state));
     (filteredState.length) ? renderLi(filteredState) : renderLi();
     
-    console.log(state);
+    // console.log(state);
 }
 
 
 function checkboxHandler(event) { //Common Function variant checkboxHandler() + then()
-    console.log(event);
-    console.dir(this.parentElement.children);
-
     event.preventDefault();
     const liChildren = [...this.parentElement.children];
     liChildren.forEach((item) => item.setAttribute('disabled', ''));
@@ -436,14 +412,14 @@ function checkboxHandler(event) { //Common Function variant checkboxHandler() + 
 
     const liObj = state.find(item => item.id == liDataId);
 
-    console.log('nonUpdatedState>>', state);
+    // console.log('nonUpdatedState>>', state);
 
     const response = updateData(liObj.id, {...liObj, completed: !liObj.completed});
     response
         .then((data) => {
-            console.log('updated>>>', data)
+            // console.log('updated>>>', data)
             liObj.completed = data.completed;
-            console.log('updatedState>>>', state);
+            // console.log('updatedState>>>', state);
             localStorage.setItem('state', JSON.stringify(state));
             (filteredState.length) ? renderLi(filteredState) : renderLi();
         })
@@ -494,14 +470,13 @@ function createLi(title, id, completed) {
 
     // Create Li
     const liRef = document.createElement('li');
-    liRef.setAttribute('data-id', `${id}`)
+    liRef.setAttribute('data-id', `${id}`);
 
     // Create Checkbox
     const checkBoxRef = document.createElement('input');
     checkBoxRef.setAttribute('type', 'checkbox');
-    if (completed) {
-        checkBoxRef.setAttribute('checked', '');
-    }
+
+    if (completed) checkBoxRef.setAttribute('checked', '');
 
     // Create Span
     const spanRef = document.createElement('span');
