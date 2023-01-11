@@ -62,7 +62,7 @@ let filteredState = [];
 // let testArr = [32, 8, 1, 15, 58]
 
 state = JSON.parse(localStorage.getItem('state')) || [];
-console.log('state', state);
+// console.log(state);
 renderLi();
 
 renderApp();
