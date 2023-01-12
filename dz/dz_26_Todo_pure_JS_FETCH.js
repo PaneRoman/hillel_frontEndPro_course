@@ -150,27 +150,27 @@ function createErrModalWindow(errMessage) {
 
 
 function sortToDoList(event) {
-    console.log('sortEvent', event);
+    // console.log('sortEvent', event);
     if (event.target.value == 'maxTo' && !filteredState.length) {
         state.sort((a, b) => b.id - a.id); // Invert Sort
         renderLi();
-        console.log('sortState', state);
+        // console.log('sortState', state);
     }
     if (event.target.value == 'maxTo' && filteredState.length) {
         filteredState.sort((a, b) => b.id - a.id);  // Invert Sort
         renderLi(filteredState);
-        console.log('sortState', filteredState);
+        // console.log('sortState', filteredState);
     }
 
     if (event.target.value == 'minTo' && !filteredState.length) {
         state.sort((a, b) => a.id - b.id); // nonInvert Sort
         renderLi();
-        console.log('sortState', state);
+        // console.log('sortState', state);
     }
     if (event.target.value == 'minTo' && filteredState.length) {
         filteredState.sort((a, b) => a.id - b.id); // nonInvert Sort
         renderLi(filteredState);
-        console.log('sortState', filteredState);
+        // console.log('sortState', filteredState);
     }
   
 }
