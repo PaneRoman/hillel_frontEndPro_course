@@ -58,8 +58,8 @@ tr, td{
 }
 
 .weather-header {
-    display: flex;
-    justify-content: flex-start;
+display: flex;
+justify-content: flex-start;
     align-items: center;
 }
 
