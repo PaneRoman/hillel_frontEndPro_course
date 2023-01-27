@@ -1,0 +1,9 @@
+.win-smile-item img {
+    width: 200px;
+    height: 200px;
+    
+}
+
+.win-smile-item h2, h3 {
+    text-transform: uppercase;
+}

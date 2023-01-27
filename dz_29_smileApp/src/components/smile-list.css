@@ -1,0 +1,18 @@
+.smile-list-conteiner {
+    width: 1024px;
+    margin: 25px auto;
+}
+
+
+.smile-list-conteiner .smile-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.smile-list-conteiner .smile-list.winner {
+    justify-content: center;
+}
